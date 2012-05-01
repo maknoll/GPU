@@ -25,60 +25,61 @@ GLuint texture;
 void drawCube()
 {
 	glBegin(GL_QUADS);
-	// Front Face
-	glNormal3f( 0.0f, 0.0f, 1.0f);
-	glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.0f, -1.0f,  1.0f);
-	glTexCoord2f(1.0f, 0.0f); glVertex3f( 1.0f, -1.0f,  1.0f);
-	glTexCoord2f(1.0f, 1.0f); glVertex3f( 1.0f,  1.0f,  1.0f);
-	glTexCoord2f(0.0f, 1.0f); glVertex3f(-1.0f,  1.0f,  1.0f);
-	// Back Face
-	glNormal3f( 0.0f, 0.0f,-1.0f);
-	glTexCoord2f(1.0f, 0.0f); glVertex3f(-1.0f, -1.0f, -1.0f);
-	glTexCoord2f(1.0f, 1.0f); glVertex3f(-1.0f,  1.0f, -1.0f);
-	glTexCoord2f(0.0f, 1.0f); glVertex3f( 1.0f,  1.0f, -1.0f);
-	glTexCoord2f(0.0f, 0.0f); glVertex3f( 1.0f, -1.0f, -1.0f);
-	// Top Face
-	glNormal3f( 0.0f, 1.0f, 0.0f);
-	glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.0f,  1.0f, -1.0f);
-	glTexCoord2f(1.0f, 0.0f); glVertex3f(-1.0f,  1.0f,  1.0f);
-	glTexCoord2f(1.0f, 1.0f); glVertex3f( 1.0f,  1.0f,  1.0f);
-	glTexCoord2f(0.0f, 1.0f); glVertex3f( 1.0f,  1.0f, -1.0f);
-	// Bottom Face
-	glNormal3f( 0.0f,-1.0f, 0.0f);
-	glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.0f, -1.0f, -1.0f);
-	glTexCoord2f(1.0f, 0.0f); glVertex3f( 1.0f, -1.0f, -1.0f);
-	glTexCoord2f(1.0f, 1.0f); glVertex3f( 1.0f, -1.0f,  1.0f);
-	glTexCoord2f(0.0f, 1.0f); glVertex3f(-1.0f, -1.0f,  1.0f);
-	// Right face
-	glNormal3f( 1.0f, 0.0f, 0.0f);
-	glTexCoord2f(1.0f, 0.0f); glVertex3f( 1.0f, -1.0f, -1.0f);
-	glTexCoord2f(1.0f, 1.0f); glVertex3f( 1.0f,  1.0f, -1.0f);
-	glTexCoord2f(0.0f, 1.0f); glVertex3f( 1.0f,  1.0f,  1.0f);
-	glTexCoord2f(0.0f, 0.0f); glVertex3f( 1.0f, -1.0f,  1.0f);
-	// Left Face
-	glNormal3f(-1.0f, 0.0f, 0.0f);
-	glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.0f, -1.0f, -1.0f);
-	glTexCoord2f(1.0f, 0.0f); glVertex3f(-1.0f, -1.0f,  1.0f);
-	glTexCoord2f(1.0f, 1.0f); glVertex3f(-1.0f,  1.0f,  1.0f);
-	glTexCoord2f(0.0f, 1.0f); glVertex3f(-1.0f,  1.0f, -1.0f);
+
+		/* Front Face */
+		glNormal3f( 0.0f, 0.0f, 1.0f);
+		glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.0f, -1.0f,  1.0f);
+		glTexCoord2f(1.0f, 0.0f); glVertex3f( 1.0f, -1.0f,  1.0f);
+		glTexCoord2f(1.0f, 1.0f); glVertex3f( 1.0f,  1.0f,  1.0f);
+		glTexCoord2f(0.0f, 1.0f); glVertex3f(-1.0f,  1.0f,  1.0f);
+		/* Back Face */
+		glNormal3f( 0.0f, 0.0f,-1.0f);
+		glTexCoord2f(1.0f, 0.0f); glVertex3f(-1.0f, -1.0f, -1.0f);
+		glTexCoord2f(1.0f, 1.0f); glVertex3f(-1.0f,  1.0f, -1.0f);
+		glTexCoord2f(0.0f, 1.0f); glVertex3f( 1.0f,  1.0f, -1.0f);
+		glTexCoord2f(0.0f, 0.0f); glVertex3f( 1.0f, -1.0f, -1.0f);
+		/* Top Face */
+		glNormal3f( 0.0f, 1.0f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.0f,  1.0f, -1.0f);
+		glTexCoord2f(1.0f, 0.0f); glVertex3f(-1.0f,  1.0f,  1.0f);
+		glTexCoord2f(1.0f, 1.0f); glVertex3f( 1.0f,  1.0f,  1.0f);
+		glTexCoord2f(0.0f, 1.0f); glVertex3f( 1.0f,  1.0f, -1.0f);
+		/* Bottom Face */
+		glNormal3f( 0.0f,-1.0f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.0f, -1.0f, -1.0f);
+		glTexCoord2f(1.0f, 0.0f); glVertex3f( 1.0f, -1.0f, -1.0f);
+		glTexCoord2f(1.0f, 1.0f); glVertex3f( 1.0f, -1.0f,  1.0f);
+		glTexCoord2f(0.0f, 1.0f); glVertex3f(-1.0f, -1.0f,  1.0f);
+		/* Right face */
+		glNormal3f( 1.0f, 0.0f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f); glVertex3f( 1.0f, -1.0f, -1.0f);
+		glTexCoord2f(1.0f, 1.0f); glVertex3f( 1.0f,  1.0f, -1.0f);
+		glTexCoord2f(0.0f, 1.0f); glVertex3f( 1.0f,  1.0f,  1.0f);
+		glTexCoord2f(0.0f, 0.0f); glVertex3f( 1.0f, -1.0f,  1.0f);
+		/* Left Face */
+		glNormal3f(-1.0f, 0.0f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.0f, -1.0f, -1.0f);
+		glTexCoord2f(1.0f, 0.0f); glVertex3f(-1.0f, -1.0f,  1.0f);
+		glTexCoord2f(1.0f, 1.0f); glVertex3f(-1.0f,  1.0f,  1.0f);
+		glTexCoord2f(0.0f, 1.0f); glVertex3f(-1.0f,  1.0f, -1.0f);
 
 	glEnd();
 }
 
 void display(void)	
 {
-	// Buffer clearen
+	/* Buffer clearen */
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	// View Matrix erstellen
+	/* View Matrix erstellen */
 	glLoadIdentity();
 	float x = distance * sin(theta) * cos(phi);
 	float y = distance * cos(theta);
 	float z = distance * sin(theta) * sin(phi);
 	gluLookAt(x, y, z, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
 
-	// Rendern des bunten Würfels.
+	/* Rendern des bunten Würfels */
 	drawCube();
 
 	glutSwapBuffers();	
@@ -86,29 +87,41 @@ void display(void)
 
 void keyboard(unsigned char key, int x, int y)
 {
-	// Hinweis: Die Texture Environment Modes können mit der Funktion glTexEnvi gesetzt werden.
-	// 'Target' ist dabei immer GL_TEXTURE_ENV und der Parametername ist GL_TEXTURE_ENV_MODE.
-	// Bei Taste 1 den Parameter GL_MODULATE als Texture Environment Mode setzen.
+	/* Hinweis: Die Texture Environment Modes können mit der Funktion
+	 * glTexEnvi gesetzt werden. 'Target' ist dabei immer GL_TEXTURE_ENV und
+	 * der Parametername ist GL_TEXTURE_ENV_MODE.
+	 */
+
+	/* Bei Taste 1 den Parameter GL_MODULATE als Texture Environment Mode
+	 * setzen.
+	 */
 	if(key == '1')
 		glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-	// Bei Taste 2 den Parameter GL_REPLACE als Texture Environment Mode setzen.
+
+	/* Bei Taste 2 den Parameter GL_REPLACE als Texture Environment Mode
+	 * setzen.
+	 */
 	if(key == '2')
 		glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 
-	// Bei Taste 3 Texturekoordinaten mit Hilfe des Matrix-Stacks um den Faktor 2 skalieren.
-	// Hinweis: die Funktion glScalef, glTranslatef etc. beziehen sich immer auf den gerade aktivierten Matrix-Mode.
+	/* Bei Taste 3 Texturekoordinaten mit Hilfe des Matrix-Stacks um den
+	 * Faktor 2 skalieren. Hinweis: die Funktion glScalef, glTranslatef etc.
+	 * beziehen sich immer auf den gerade aktivierten Matrix-Mode.
+	 */
 	if(key == '3')
 	{
-		// Wechseln Sie zunächst in der GL_TEXTURE Matrix Mode.
+		/* Wechseln Sie zunächst in der GL_TEXTURE Matrix Mode */
 		glMatrixMode(GL_TEXTURE);
-		// Setzen Sie die Texturmatrix zurück und wenden Sie anschließend die Skalierung an.
+		/* Setzen Sie die Texturmatrix zurück und wenden Sie anschließend die
+		 * Skalierung an.
+		 */
 		glLoadIdentity();
 		glScalef(2.0f, 2.0f, 2.0f);
-		// Wechseln Sie zurück in die GL_MODELVIEW Matrix Mode.
+		/* Wechseln Sie zurück in die GL_MODELVIEW Matrix Mode */
 		glMatrixMode(GL_MODELVIEW);
 	}
 
-	// Bei Taste 4 die Texture Matrix auf die Einheitsmatrix zurücksetzen.
+	/* Bei Taste 4 die Texture Matrix auf die Einheitsmatrix zurücksetzen */
 	if(key == '4')
 	{
 		glMatrixMode(GL_TEXTURE);
@@ -122,25 +135,33 @@ void mouseMotion(int x, int y)
 	float deltaX = x - oldX;
 	float deltaY = y - oldY;
 	
-	if (motionState == ROTATE) {
+	if(motionState == ROTATE)
+	{
 		theta -= 0.01f * deltaY;
 
-		if (theta < 0.01f) theta = 0.01f;
-		else if (theta > PI/2.0 - 0.01f) theta = PI/2.0f - 0.01f;
+		if(theta < 0.01f)
+			theta = 0.01f;
+		else
+			if(theta > PI / 2.0 - 0.01f)
+				theta = PI / 2.0f - 0.01f;
 
 		phi += 0.01f * deltaX;	
-		if (phi < 0) phi += 2*PI;
-		else if (phi > 2*PI) phi -= 2*PI;
+		if(phi < 0)
+			phi += 2 * PI;
+		else
+			if(phi > 2 * PI)
+				phi -= 2 * PI;
 	}
-	else if (motionState == MOVE) {
-		distance += 0.01f * deltaY;
-	}
+	else
+		if(motionState == MOVE)
+		{
+			distance += 0.01f * deltaY;
+		}
 
 	oldX = (float)x;
 	oldY = (float)y;
 
 	glutPostRedisplay();
-
 }
 
 void mouse(int button, int state, int x, int y)
@@ -148,16 +169,21 @@ void mouse(int button, int state, int x, int y)
 	oldX = (float)x;
 	oldY = (float)y;
 
-	if (button == GLUT_LEFT_BUTTON) {
-		if (state == GLUT_DOWN) {
+	if(button == GLUT_LEFT_BUTTON)
+	{
+		if(state == GLUT_DOWN)
+		{
 			motionState = ROTATE;
 		}
 	}
-	else if (button == GLUT_RIGHT_BUTTON) {
-		if (state == GLUT_DOWN) {
-			motionState = MOVE;
+	else
+		if(button == GLUT_RIGHT_BUTTON)
+		{
+			if(state == GLUT_DOWN)
+			{
+				motionState = MOVE;
+			}
 		}
-	}
 }
 
 void idle(void)
@@ -185,22 +211,23 @@ int main(int argc, char **argv)
 	
 	glEnable(GL_DEPTH_TEST);
 
-	glViewport(0,0,width,height);					
+	glViewport(0, 0, width, height);					
 	glMatrixMode(GL_PROJECTION);					
 	glLoadIdentity();								
 
-	gluPerspective(45.0f,(GLfloat)width/(GLfloat)height,0.1f,100.0f);
+	gluPerspective(45.0f, (GLfloat)width / (GLfloat)height, 0.1f, 100.0f);
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
-	// Laden der Textur
+	/* Laden der Textur */
 	texture = loadBMP("rockwall_color.bmp");
-	// Binden der Textur
+	/* Binden der Textur */
 	glBindTexture(GL_TEXTURE_2D, texture);
-	// 2D-Texturierung aktivieren
+	/* 2D-Texturierung aktivieren */
 	glEnable(GL_TEXTURE_2D);
 
 	glutMainLoop();
+
 	return 0;
 }
