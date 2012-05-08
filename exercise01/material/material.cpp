@@ -64,7 +64,7 @@ void applyMaterial(const EColor& colorID)
 	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambient);
 	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse[colorID]);
 	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular[colorID]);
-	glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, shininess);
+	glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, shininess[colorID]);
 }
 
 /* Untergrund zeichen: Ein Viereck */
@@ -124,7 +124,7 @@ void display(void)
 	glLightfv(GL_LIGHT2, GL_AMBIENT, L1);
 	glLightfv(GL_LIGHT2, GL_DIFFUSE, difL2);
 	glLightfv(GL_LIGHT2, GL_SPECULAR, L1);
-	GLfloat posL2[4] = {1.0f, 1.0f, 1.0f, 1.0f};
+	GLfloat posL2[4] = {1.0f, 1.0f, 1.0f, 0.0f};
 	glLightfv(GL_LIGHT2, GL_POSITION, posL2);
 	
 	/* Richten eines Spot-Lichtes von (2,2,2) nach (0,0,0) mit einem
@@ -270,7 +270,7 @@ int main(int argc, char **argv)
 	glEnable(GL_LIGHTING);
 	//glEnable(GL_LIGHT0);
 	glEnable(GL_LIGHT1);
-	//glEnable(GL_LIGHT2);
+	glEnable(GL_LIGHT2);
 	glEnable(GL_LIGHT3);
 	
 	glEnable(GL_DEPTH_TEST);
