@@ -47,7 +47,7 @@ void drawMirror()
 
 void display(void)	
 {
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 	glLoadIdentity();
@@ -77,7 +77,33 @@ void display(void)
 	// *** Spiegelobjekt mit diffuser Farbe mirrorColor zeichen
 	// *** Blending aktivieren und ueber Alpha-Kanal mit Spiegelbild zusammenrechnen
 
-	drawMirror();
+
+    glEnable(GL_STENCIL_TEST);
+    glColorMask(0, 0, 0, 0);
+    glDisable(GL_DEPTH_TEST);
+    glStencilFunc(GL_ALWAYS, 1, 0xffffffff);
+    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+    glDepthMask(GL_FALSE);
+
+    drawMirror();
+
+    glDepthMask(GL_TRUE);
+    glColorMask(1, 1, 1, 1);
+    glEnable(GL_DEPTH_TEST);
+    glStencilFunc(GL_EQUAL, 1, 0xffffffff);
+    glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+
+    glPushMatrix();
+    glScalef( 1.0, -1.0, 1.0 );
+    glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
+    drawScene();
+    glPopMatrix();
+
+    glDisable(GL_STENCIL_TEST);
+    glBlendFunc(GL_ONE_MINUS_SRC_ALPHA, GL_SRC_ALPHA);
+    glEnable(GL_BLEND);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, mirrorColor);
+    drawMirror();
 	glDisable(GL_BLEND);
 
 	glutSwapBuffers();	

@@ -4,7 +4,6 @@
 #include <iostream>
 #include <vector>
 
-#include <GLUT/glew.h>
 #include <GLUT/glut.h>
 
 #include "vector.h"
@@ -67,6 +66,10 @@ Vector startP3(0.0f, 1.0f, 0.0f);
 
 int globalIndex = 0;
 int maxLevel = 8;
+
+GLuint positionsBuffer;
+GLuint normalsBuffer;
+GLuint indexBuffer;
 
 void generateTriangle(Vector p0, Vector p1, Vector p2)
 {
@@ -137,16 +140,31 @@ void generateTetraeders(Vector p0, Vector p1, Vector p2, Vector p3, int level)
 
 void generateGeometryVertexBuffer()
 {
+
 	// TODO: Erzeugen eines Vertex Buffer Objects für die Positionen.
 	// Hinweis: Die Erzeugung eiens VBOs vollzieht sich in 4 Schritten
 	// - Generieren eines Buffer Handles
 	// - Binden des Buffers (Target = GL_ARRAY_BUFFER)
 	// - Buffer Daten in den VRAM kopieren (Usage = GL_STATIC_DRAW)
 	// - Buffer nicht mehr binden (stattdessen eine 0 binden).	
+
+  glGenBuffers(1, &positionsBuffer);
+  glBindBuffer(GL_ARRAY_BUFFER, positionsBuffer);
+  glBufferData(GL_ARRAY_BUFFER, positions.size() * sizeof(Vector), &positions[0], GL_STATIC_DRAW);
+  glBindBuffer(GL_ARRAY_BUFFER, 0);
 	
 	// TODO: Erzeugen eines Vertex Buffer Objects für die Normalen.
-	
+  glGenBuffers(1, &normalsBuffer);
+  glBindBuffer(GL_NORMAL_ARRAY, normalsBuffer);
+  glBufferData(GL_NORMAL_ARRAY, normals.size() * sizeof(Vector), &normals[0], GL_STATIC_DRAW);
+  glBindBuffer(GL_NORMAL_ARRAY, 0);
+
 	// TODO: Erzeugen eines Indexbuffers. Dies funktioniert genauso, wie die Erzeugung eines VBOs (Hinweis: Target = GL_ELEMENT_ARRAY_BUFFER).
+  glGenBuffers(1, &indexBuffer);
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
+  glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(int), &indices[0], GL_STATIC_DRAW);
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
 	
 	// TODO: Erzeugen eines Vertex Array Objects (VAOs).
 	// VAOs werden genutzt um der GPU mitzuteilen, von welchen VBOs die Daten für das Rendering genommen werden sollen.
@@ -163,21 +181,40 @@ void generateGeometryVertexBuffer()
 		// wieder glVertexAttribPointer nutzen..
 		// Aufräumen: Den Wert '0' als Vertex Buffer Object binden. (kein VBO mehr aktiv)
 		// Zuletzt muss mitgeteilt werden, welche Vertex-Attribut Indices genutzt werden sollen. Dies geschieht mit glEnableVertexAttribArray.
-	// Aufräumen: Unbinden des Vertex Array Objects (eine 0 binden).	
+	// Aufräumen: Unbinden des Vertex Array Objects (eine 0 binden).
+  glBindBuffer(GL_ARRAY_BUFFER, positionsBuffer);
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+  glEnableVertexAttribArray(0);
+  glBindBuffer(GL_NORMAL_ARRAY, normalsBuffer);
+  glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, 0);
+  glEnableVertexAttribArray(2);
+
 }
 
 
 void drawGeometryVertexBuffer()
 {
 	// TODO: Binden des VAOs. (Die GPU weiß nun, wo sie die Geometriedaten herzuholen hat.)
-	// TODO: Index-Buffer binden.
+  // TODO: Index-Buffer binden.
+  glBindBuffer(GL_ARRAY_BUFFER, positionsBuffer);
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
+  glBindBuffer(GL_NORMAL_ARRAY, normalsBuffer);
 	
 	// TODO: mit glDrawElements die Triangles rendern. 
 	// Hinweis: Der Type-Parameter definiert den im Index Buffer verwendeten Datentyp.
 	//   Der letzte Parameter dieses DrawCalls ist NULL, da der Index-Buffer von Beginn an gelesen werden soll.
 	unsigned int numTriangles = positions.size();
 	
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_NORMAL_ARRAY);
+    glDrawElements(GL_TRIANGLES, numTriangles, GL_UNSIGNED_INT, (void *)0);
+    glDisableClientState(GL_VERTEX_ARRAY);
+    glDisableClientState(GL_NORMAL_ARRAY);
+
 	// TODO: Unbinden von VAO und Index-Buffer	
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    glBindVertexArrayAPPLE(0);
+
 }
 
 // calc the view position and direction from theta/phi coordinates
@@ -317,6 +354,24 @@ void initGL()
 	glLoadIdentity();
 
 	glClearColor(0.5, 0.5, 1.0, 1.0);
+#if 1
+    GLuint shaderProgram;
+    GLchar *vertexSource = "void main(void){gl_FrontColor = gl_Color;gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;}";
+    GLchar *fragmentSource = "void main(void){gl_FragColor = gl_FragColor = vec4(ex_Color,1.0);}";
+    GLuint vertexShader, fragmentShader;
+    vertexShader = glCreateShader(GL_VERTEX_SHADER);
+    fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(vertexShader, 1, (const GLchar**)&vertexSource, 0);
+    glShaderSource(fragmentShader, 1, (const GLchar**)&fragmentSource, 0);
+    glCompileShader(vertexShader);
+    glCompileShader(fragmentShader);
+    shaderProgram = glCreateProgram();
+    glAttachShader(shaderProgram, vertexShader);
+    glAttachShader(shaderProgram, fragmentShader);
+    glBindAttribLocation(shaderProgram, 0, "in_Position");
+    glLinkProgram(shaderProgram);
+    glUseProgram(shaderProgram);
+#endif
 }
 
 
@@ -330,8 +385,6 @@ int main(int argc, char** argv)
 	glutCreateWindow("Fractal with VBO");
 
 	// Init glew so that the GLSL functionality will be available
-	if(glewInit() != GLEW_OK)
-	   cout << "GLEW init failed!" << endl;
 
 	// Register GLUT callback functions   
 	glutDisplayFunc(display);

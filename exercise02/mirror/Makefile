@@ -1,14 +1,17 @@
 CC = clang++
 CFLAGS = -Wall
 LDFLAGS = -framework OpenGL -framework GLUT
-BIN = mirror
-OBJ = mirror.o
+BIN = $(shell basename `pwd`)
+OBJ = $(patsubst %.cpp, %.o, $(wildcard *.cpp))
 
-%.o: %.cpp
-	$(CC) $(CFLAGS) -c $<
+all: $(BIN)
+	./$(BIN)
 
 $(BIN): $(OBJ)
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^
 
+%.o: %.cpp
+	$(CC) $(CFLAGS) -c $<
+
 clean:
-	rm -f $(OBJ) $(BIN)
+	rm $(OBJ) $(BIN)
