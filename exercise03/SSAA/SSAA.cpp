@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include <GLUT/glut.h>
 #include <iostream>
+#include <stdio.h>
+#include <math.h>
 using namespace std;
 
 // Global variables
@@ -51,7 +53,8 @@ void initGL()
    // Enable depth buffer
    glEnable(GL_DEPTH_TEST);
 
-   // TODO: Per-Sample shading aktivieren.
+   // Per-Sample shading aktivieren.
+   usePerSampleShading = true;
 }
 
 int initFBOTextures()
@@ -60,8 +63,8 @@ int initFBOTextures()
 	glGenTextures (1, &sceneTextureId);
 	glBindTexture (GL_TEXTURE_2D, sceneTextureId);
 	glTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA8, width*(1<<samples), height*(1<<samples), 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
-	// TODO: Der Min-Filter führt derzeit noch kein MipMapping durch. Nutzen Sie auch den Nearest-Filter für das MipMapping!
-	glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);	// <- hier den letzten Parameter ändern
+	// Der Min-Filter führt derzeit noch kein MipMapping durch. Nutzen Sie auch den Nearest-Filter für das MipMapping!
+	glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);	// <- hier den letzten Parameter ändern
 	glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
 	glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
@@ -79,8 +82,10 @@ int initFBOTextures()
 	glFramebufferTexture2D (GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, sceneTextureId, 0);
 	glFramebufferTexture2D (GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthTextureId, 0);
 
-	// TODO: Binden der Szenen Textur
-	// TODO: Setzen Sie die mindest LOD Stufe auf 'samples'. Nutzen Sie dafpr die Texture Filter Control von glTexEnvf	
+	// Binden der Szenen Textur
+	glBindTexture(GL_TEXTURE_2D, sceneTextureId);
+	// Setzen Sie die mindest LOD Stufe auf 'samples'. Nutzen Sie dafpr die Texture Filter Control von glTexEnvf
+	glTexEnvf(GL_TEXTURE_FILTER_CONTROL, GL_TEXTURE_LOD_BIAS, samples);	
 
 	// check framebuffer status
 	GLenum status = glCheckFramebufferStatus (GL_FRAMEBUFFER);
@@ -145,9 +150,13 @@ void keyboard(unsigned char key, int x, int y)
 		case '3':
 			usePerSampleShading = !usePerSampleShading;
 			
-			// TODO: Abhängig vom usePerSampleShading-Flag einstellen, für wieviele Samples der Fragment Shader ausgeführt werden soll.
+			// Abhängig vom usePerSampleShading-Flag einstellen, für wieviele Samples der Fragment Shader ausgeführt werden soll.
 			// Per-Sample Shading = für alle Samples
+			if(usePerSampleShading)
+				samples = 2;
 			// Per-Pixel Shading = für ein einziges Sample
+			if(!usePerSampleShading)
+				samples = 1;
 
 			printf(useSSAA ? "SSAA/" : (usePerSampleShading ? "MSAA(sample)/" : "MSAA(pixel)/") );
 			printf(useTexturedQuad ? "Texture        \r" : "Geometry        \r");
@@ -258,9 +267,11 @@ void display()
 	// Soll SSAA verwendet werden?
 	if (useSSAA)
 	{
-		// TODO: Größe des Viewports auf das 2^(samples) fache setzen
-		
-		// TODO: Binden des FBOs, in das gerendert werden soll.		
+		// Größe des Viewports auf das 2^(samples) fache setzen
+		glViewport(0, 0, width * pow(2, samples), height * pow(2, samples));
+
+		// Binden des FBOs, in das gerendert werden soll.
+		glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, sceneFB);
 
 		// Clear Color- und Depth-Buffer
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -268,19 +279,26 @@ void display()
 		// Rendern der Szene
 		drawScene();
 
-		// TODO: Viewport auf die Auflösung des Backbuffers setzen.
+		// Viewport auf die Auflösung des Backbuffers setzen.
+		glViewport(0, 0, width, height);
 		
-		// TODO: FBO abschalten: jetzt wird wieder in den Backbuffer gerendert		
+		// FBO abschalten: jetzt wird wieder in den Backbuffer gerendert
+		glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
 
-		// TODO: Binden der Szenen-Textur.
+		// Binden der Szenen-Textur.
+		glBindTexture(GL_TEXTURE_2D, sceneTextureId);
 
-		// TODO: Da die Textur nun aktiv ist, müssen die MipMap Stufen neu generiert werden.
+		// Da die Textur nun aktiv ist, müssen die MipMap Stufen neu generiert werden.
+		glGenerateMipmap(GL_TEXTURE_2D);
+
+		// Color- und Depth-Buffer clearen.
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
-		// TODO: Color- und Depth-Buffer clearen.
-		
-		// TODO: Das Fullscreen Quad rendern, das mit der FBO Textur texturiert ist.		
+		// Das Fullscreen Quad rendern, das mit der FBO Textur texturiert ist.		
+		drawScreenFillingQuad();
 
-		// TODO: Textur nicht mehr binden.
+		// Textur nicht mehr binden.
+		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 	else
 	{
@@ -311,8 +329,8 @@ int main(int argc, char** argv)
    // Initialize GLUT
    glutInit(&argc, argv);
 
-   // TODO: Enable Multi-Sampling
-   glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
+   // Enable Multi-Sampling
+   glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH | GLUT_MULTISAMPLE);
    glutInitWindowSize(width, height);
    glutCreateWindow("Super-Sampling Anti-Aliasing");
 
