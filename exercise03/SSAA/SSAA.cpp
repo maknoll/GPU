@@ -268,7 +268,7 @@ void display()
 	if (useSSAA)
 	{
 		// Größe des Viewports auf das 2^(samples) fache setzen
-		glViewport(0, 0, width * pow(2, samples), height * pow(2, samples));
+		glViewport(0, 0, width * (1<<samples), height * (1<<samples));
 
 		// Binden des FBOs, in das gerendert werden soll.
 		glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, sceneFB);
@@ -289,7 +289,7 @@ void display()
 		glBindTexture(GL_TEXTURE_2D, sceneTextureId);
 
 		// Da die Textur nun aktiv ist, müssen die MipMap Stufen neu generiert werden.
-		glGenerateMipmap(GL_TEXTURE_2D);
+		glGenerateMipmapEXT(GL_TEXTURE_2D);
 
 		// Color- und Depth-Buffer clearen.
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -343,6 +343,9 @@ int main(int argc, char** argv)
 	glutKeyboardFunc(keyboard);
 	glutDisplayFunc(display);
 	glutTimerFunc(25, timer, 0);     // Call timer() in 25 milliseconds
+
+    // Mipmapping Fix
+    glTexEnvf(GL_TEXTURE_FILTER_CONTROL, GL_TEXTURE_LOD_BIAS, -1);
 
 	// Enter main loop
 	glutMainLoop();
