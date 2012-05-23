@@ -335,7 +335,8 @@ void display()
 	glUseProgram( 0 );
 	
 	// falls Blur Shader aktiviert ist, muss in eine Textur gerendert werden
-	glBindFramebuffer (GL_FRAMEBUFFER, blurHorizontalFB);      // activate fbo
+	if (useBlur)
+      glBindFramebuffer (GL_FRAMEBUFFER, blurHorizontalFB);      // activate fbo
 
 	// Clear window
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -346,24 +347,27 @@ void display()
 	glRotatef(alpha, 0, 1, 0);
 	glutSolidTeapot(3);
 
-	glBindFramebuffer (GL_FRAMEBUFFER, teapotFB);
+    if (useBlur)
+    {
+      glBindFramebuffer (GL_FRAMEBUFFER, teapotFB);
 
-	glUseProgram( shaderProgramBlur_hor );
+	  glUseProgram( shaderProgramBlur_hor );
     
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	drawScreenFillingQuad();
+      glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+      drawScreenFillingQuad();
 
-	glBindFramebuffer (GL_FRAMEBUFFER, 0);
+      glBindFramebuffer (GL_FRAMEBUFFER, 0);
 
-	glUseProgram( shaderProgramBlur_vert );
+      glUseProgram( shaderProgramBlur_vert );
 
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	drawScreenFillingQuad();
+      glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+      drawScreenFillingQuad();
 
-	glUseProgram( 0 );
+      glUseProgram( 0 );
 
-	// Teapot oben drüber zeichnen.
-    glutSolidTeapot(3);
+      // Teapot oben drüber zeichnen.
+      glutSolidTeapot(3);
+    }
 
 	// Increment rotation angle
 	alpha += 1;
