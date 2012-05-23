@@ -345,7 +345,7 @@ int main(int argc, char** argv)
 	glutTimerFunc(25, timer, 0);     // Call timer() in 25 milliseconds
 
     // Mipmapping Fix
-    glTexEnvf(GL_TEXTURE_FILTER_CONTROL, GL_TEXTURE_LOD_BIAS, -1);
+    glTexEnvf(GL_TEXTURE_FILTER_CONTROL, GL_TEXTURE_LOD_BIAS, 0);
 
 	// Enter main loop
 	glutMainLoop();
