@@ -17,8 +17,6 @@ void main()
 
 	// Wert zum Aufakkumulieren der Farbwerte
 	vec3 val = vec3(0);
-    float xbuff;
-
 
 	for(int i = 0; i < filterWidth; i++) 
 	{
