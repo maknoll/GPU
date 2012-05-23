@@ -16,10 +16,14 @@ void drawQuad(float x, float y, float z)
 void display(void)	
 {
 	/* Aufgabe a, b */
+#if 0
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+#endif
 	
 	/* Aufgabe c */
-	//glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+#if 1
+	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+#endif
 
 	glClear(GL_COLOR_BUFFER_BIT);
 
@@ -29,28 +33,34 @@ void display(void)
 	// *** Farben mit Alpha Kanal setzen
 	
 	/* Aufgabe a */
+#if 0
 	glColor4f(1.0f, 0.0f, 0.0f, 1.0f);
 	drawQuad(1, 1, -2);
 	glColor4f(0.0f, 1.0f, 0.0f, 1.0f);
 	drawQuad(0.25, 0.75, -1);
 	glColor4f(0.0f, 0.0f, 1.0f, 1.0f);
 	drawQuad(0.5, 0.25, 0);
+#endif
 
 	/* Aufgabe b */
-	/*glColor4f(1.0f, 0.0f, 0.0f, 0.7f);
+#if 0
+	glColor4f(1.0f, 0.0f, 0.0f, 0.7f);
 	drawQuad(1, 1, -2);
 	glColor4f(0.0f, 1.0f, 0.0f, 0.7f);
 	drawQuad(0.25, 0.75, -1);
 	glColor4f(0.0f, 0.0f, 1.0f, 0.7f);
-	drawQuad(0.5, 0.25, 0);*/
+	drawQuad(0.5, 0.25, 0);
+#endif
 
 	/* Aufgabe c */
-	/*glColor4f(1.0f, 1.0f, 0.0f, 1.0f);
+#if 1
+	glColor4f(1.0f, 1.0f, 0.0f, 1.0f);
 	drawQuad(1, 1, -2);
 	glColor4f(0.0f, 1.0f, 1.0f, 1.0f);
 	drawQuad(0.25, 0.75, -1);
 	glColor4f(1.0f, 0.0f, 1.0f, 1.0f);
-	drawQuad(0.5, 0.25, 0);*/
+	drawQuad(0.5, 0.25, 0);
+#endif
 
 	glFlush();
 }
@@ -78,13 +88,13 @@ int main(int argc, char **argv)
 	glEnable(GL_BLEND);
 
 	/* Aufgabe a */
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+	//glBlendFunc(GL_ONE, GL_ONE);
 
 	/* Aufgabe b */
 	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);	
 
 	/* Aufgabe c */
-	//glBlendFunc(GL_DST_COLOR, GL_SRC_COLOR);
+	glBlendFunc(GL_DST_COLOR, GL_ZERO);
 
 	glutMainLoop();
 
