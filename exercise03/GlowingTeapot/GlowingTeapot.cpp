@@ -122,39 +122,50 @@ void initGL()
 
 void initGLSL()
 {
-	// TODO: Create empty shader object (vertex shader) and assign it to 'vertexShaderPumping'
-	
+	// Create empty shader object (vertex shader) and assign it to 'vertexShaderBlur'
+	vertexShaderBlur = glCreateShader(GL_VERTEX_SHADER);
+
 	// Read vertex shader source 
 	string shaderSource = readFile("blur.vert");
 	const char* sourcePtr = shaderSource.c_str();
 
-	// TODO: Attach shader code
+	// Attach shader code
+	glShaderSource(vertexShaderBlur, 1, &sourcePtr, NULL);
 	
-	// TODO: Compile shader	
+	// Compile shader
+	glCompileShader(vertexShaderBlur);
 	
 	printShaderInfoLog(vertexShaderBlur);
 
-	// TODO: Create empty shader object (fragment shader) and assign it to 'fragmentShaderPumping'
+	// Create empty shader object (fragment shader) and assign it to 'fragmentShaderBlur'
+	fragmentShaderBlur = glCreateShader(GL_FRAGMENT_SHADER);
 
 	// Read vertex shader source 
 	shaderSource = readFile("blur.frag");
 	sourcePtr = shaderSource.c_str();
 
-	// TODO: Attach shader code
+	// Attach shader code
+	glShaderSource(fragmentShaderBlur, 1, &sourcePtr, NULL);
 
-	// TODO: Compile shader
+	// Compile shader
+	glCompileShader(fragmentShaderBlur);
 
 	printShaderInfoLog(fragmentShaderBlur);
 
-	// TODO: Create shader program and assign it to 'shaderProgramPumping'
+	// Create shader program and assign it to 'shaderProgramBlur'
+	shaderProgramBlur = glCreateProgram();
 
-	// TODO: Attach shader vertex shader and fragment shader to program	
+	// Attach shader vertex shader and fragment shader to program	
+	glAttachShader(shaderProgramBlur, vertexShaderBlur);
+	glAttachShader(shaderProgramBlur, fragmentShaderBlur);
 
-	// TODO: Link program
+	// Link program
+	glLinkProgram(shaderProgramBlur);
 	
 	printProgramInfoLog(shaderProgramBlur);
 
-	// TODO: Use program.	
+	// Use program.
+	glUseProgram(shaderProgramBlur);
 
 	// Eingabe in diesen Shader ist die Textur, in die die Szene gerendert wird.
 	// An dieser Stelle wird die uniform Location für die Textur-Variable im Shader geholt.
@@ -289,7 +300,8 @@ void display()
 
 		glUseProgram( 0 );
 
-		// TODO: Teapot oben drüber zeichnen.
+		// Teapot oben drüber zeichnen.
+        glutSolidTeapot(3);
 	}
 
 	// Increment rotation angle

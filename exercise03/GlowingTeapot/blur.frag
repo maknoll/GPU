@@ -16,26 +16,33 @@ void main()
 	texCoord.y = gl_TexCoord[0].t - (float(filterWidth / 2) * texCoordDelta);
 
 	// Wert zum Aufakkumulieren der Farbwerte
-	vec3 val = vec3(0); 
+	vec3 val = vec3(0);
+    float xbuff;
 
-	//for(...) 
+	for(int x = 0; x < filterWidth; x++) 
 	{
-		//for(..) 
+        xbuff = texCoord.x;
+        
+		for(int y = 0; y < filterWidth; y++) 
 		{
-			//val = val + ...;
+			val += texture2D(texture, texCoord).xyz;
 
 			//TODO: Verschieben der Texturkoordinate -> naechstes Pixel in x Richtung
+            texCoord.x += texCoordDelta;
 		}
 		// TODO: Zurücksetzen von texCoord.x und weiterschieben von texCoord.y
+        texCoord.x = xbuff;
+        texCoord.y += texCoordDelta;
 	}
 
 	// Durch filterWidth^2 teilen, um zu normieren.
 	val = 2.0 * val / float(filterWidth*filterWidth);   
 
 	// TODO: Ausgabe von val
+    gl_FragColor.rgb = val.xyz;
 
 	// Die folgende Zeile dient nur zu Debugzwecken!
 	// Wenn das Framebuffer object richtig eingestellt wurde und die Textur an diesen Shader übergeben wurde
 	// wird die Textur duch den folgenden Befehl einfach nur angezeigt.
-	gl_FragColor.rgb = texture2D(texture,gl_TexCoord[0].st).xyz;
+	// gl_FragColor.rgb = texture2D(texture,gl_TexCoord[0].st).xyz;
 }
