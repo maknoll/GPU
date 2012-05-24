@@ -3,8 +3,6 @@
 #include <stdlib.h>
 #include <GLUT/glut.h>
 #include <iostream>
-#include <stdio.h>
-#include <math.h>
 using namespace std;
 
 // Global variables
@@ -31,30 +29,30 @@ bool usePerSampleShading = false;
 
 void initGL()
 {
-   // Initialize camera
-   glMatrixMode(GL_PROJECTION);
-   glLoadIdentity();
-   gluPerspective(45, 1, 0.1, 100);
-   glMatrixMode(GL_MODELVIEW);
+	// Initialize camera
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	gluPerspective(45, 1, 0.1, 100);
+	glMatrixMode(GL_MODELVIEW);
 
-   // Initialize light source
-   GLfloat light_pos[] = {10, 10, 10, 1};
-   GLfloat light_col[] = { 1,  1,  1, 1};
+	// Initialize light source
+	GLfloat light_pos[] = {10, 10, 10, 1};
+	GLfloat light_col[] = { 1,  1,  1, 1};
 
-   glLightfv(GL_LIGHT0, GL_POSITION, light_pos);
-   glLightfv(GL_LIGHT0, GL_DIFFUSE,  light_col);
-   glLightfv(GL_LIGHT0, GL_SPECULAR, light_col);
+	glLightfv(GL_LIGHT0, GL_POSITION, light_pos);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE,  light_col);
+	glLightfv(GL_LIGHT0, GL_SPECULAR, light_col);
 
-   // Enable lighting
-   glEnable(GL_LIGHTING);
-   glEnable(GL_LIGHT0);
-   glEnable(GL_COLOR_MATERIAL);
+	// Enable lighting
+	glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHT0);
+	glEnable(GL_COLOR_MATERIAL);
 
-   // Enable depth buffer
-   glEnable(GL_DEPTH_TEST);
+	// Enable depth buffer
+	glEnable(GL_DEPTH_TEST);
 
-   // Per-Sample shading aktivieren.
-   usePerSampleShading = true;
+	// Per-Sample shading aktivieren.
+	usePerSampleShading = true;
 }
 
 int initFBOTextures()
@@ -91,15 +89,15 @@ int initFBOTextures()
 	GLenum status = glCheckFramebufferStatus (GL_FRAMEBUFFER);
 	switch (status)
 	{
-	case GL_FRAMEBUFFER_COMPLETE:
-		cout << "FBO complete" << endl;
-		break;
-	case GL_FRAMEBUFFER_UNSUPPORTED:
-		cout << "FBO configuration unsupported" << endl;
-		return 1;
-	default:
-		cout << "FBO programmer error" << endl;
-		return 1;
+		case GL_FRAMEBUFFER_COMPLETE:
+			cout << "FBO complete" << endl;
+			break;
+		case GL_FRAMEBUFFER_UNSUPPORTED:
+			cout << "FBO configuration unsupported" << endl;
+			return 1;
+		default:
+			cout << "FBO programmer error" << endl;
+			return 1;
 	}
 	glBindFramebufferEXT (GL_FRAMEBUFFER, 0);
 	return 0;
