@@ -152,9 +152,11 @@ void keyboard(unsigned char key, int x, int y)
 			// Per-Sample Shading = für alle Samples
 			if(usePerSampleShading)
 				samples = 2;
+				//glMinSampleShadingARB(1);
 			// Per-Pixel Shading = für ein einziges Sample
 			if(!usePerSampleShading)
 				samples = 1;
+				//glMinSampleShadingARB(0);
 
 			printf(useSSAA ? "SSAA/" : (usePerSampleShading ? "MSAA(sample)/" : "MSAA(pixel)/") );
 			printf(useTexturedQuad ? "Texture        \r" : "Geometry        \r");
