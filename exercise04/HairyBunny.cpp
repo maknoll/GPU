@@ -5,6 +5,7 @@
 #include <math.h>
 #include <GL/glew.h>
 #include <GLUT/glut.h>
+#include <OpenGL/glext.h>
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -332,6 +333,12 @@ void initGLSL()
 	glAttachShader(progHair, vertexShaderHair);
 	glAttachShader(progHair, fragmentShaderHair);
 	glAttachShader(progHair, geometryShaderHair);
+
+    // Geometryshader init
+    glProgramParameteriEXT(progHair, GL_GEOMETRY_VERTICES_OUT_EXT, 3);
+    glProgramParameteriEXT(progHair, GL_GEOMETRY_INPUT_TYPE_EXT, GL_TRIANGLES);
+    glProgramParameteriEXT(progHair, GL_GEOMETRY_OUTPUT_TYPE_EXT, GL_TRIANGLE_STRIP);
+
 
 	// Link program
 	glLinkProgram(progHair);

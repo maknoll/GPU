@@ -1,5 +1,5 @@
 // geometry shader for growing hair
-
+/*
 #version 150
 
 #define OUT_VERTS 3
@@ -23,4 +23,19 @@ void main(void)
 		EmitVertex();
 	}
 	EndPrimitive();
+}
+*/
+
+#version 120
+#extension GL_EXT_geometry_shader4: enable
+
+void main(void) 
+{
+  //Pass-through
+  for(int i = 0 ; i < gl_VerticesIn ; i++)
+  {
+    gl_Position = gl_PositionIn[i];
+    EmitVertex();
+  }
+  EndPrimitive();
 }
