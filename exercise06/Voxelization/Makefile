@@ -1,11 +1,10 @@
 CC = clang++
 CFLAGS = -Wall
-LDFLAGS = -framework OpenGL -framework GLUT -lglew
+LDFLAGS = -framework OpenGL -framework GLUT -lglew -g
 BIN = $(shell basename `pwd`)
 OBJ = $(patsubst %.cpp, %.o, $(wildcard *.cpp))
 
 all: $(BIN)
-	./$(BIN)
 
 $(BIN): $(OBJ)
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^
