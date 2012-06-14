@@ -1,5 +1,5 @@
 // Extension aktivieren, damit << im Befehlssatz vorliegt.
-#extension GL_EXT_gpu_shader4 : require
+#extension GL_EXT_gpu_shader4 : enable
 
 // Ausgabevariable
 varying out uvec4 result;
@@ -18,12 +18,26 @@ void main()
 	// Weisen Sie diese bit-Maske der Variable 'result' zu.
   
   if (depth < 32u)
-    result.w = 1u << depth;
+  {
+    result.w = ~0u << depth;
+    result.z = ~0u;
+    result.y = ~0u;
+    result.x = ~0u;
+  }
   else if (depth < 64u)
-    result.z = 1u << (depth % 32u);
+  {
+    result.z = ~0u << (depth % 32u);
+    result.y = ~0u;
+    result.x = ~0u;
+  }
   else if (depth < 96u)
-    result.y = 1u << (depth % 32u);
+  {
+    result.y = ~0u << (depth % 32u);
+    result.x = ~0u;
+  }
   else if (depth < 128u)
-    result.x = 1u << (depth % 32u);
+  {
+    result.x = ~0u << (depth % 32u);
+  }
   
 }

@@ -322,8 +322,8 @@ void drawVoxel(float x, float y, float z)
   
   glEnableVertexAttribArray(0);
   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, triangles);
-  glEnableVertexAttribArray(2);
-  glVertexAttribPointer(2, 4, GL_UNSIGNED_BYTE, GL_FALSE, 0, colors);
+  glEnableVertexAttribArray(3);
+  glVertexAttribPointer(3, 4, GL_UNSIGNED_BYTE, GL_FALSE, 0, colors);
   glDrawArrays (GL_TRIANGLES, 0, 36);
   
   glPopMatrix();
@@ -331,7 +331,7 @@ void drawVoxel(float x, float y, float z)
 
 void drawVoxelModel()
 {
-
+  
 	int i = 0;
 	for (int y = 0 ; y < VOXEL_HEIGHT ; y++) {
     
@@ -349,12 +349,12 @@ void drawVoxelModel()
 						drawVoxel(x/(float)(VOXEL_WIDTH) - 0.5f, y/(float)(VOXEL_HEIGHT) - 0.5f, 0.25f*(k-2 + z/32.0f));
 					}
           
-					bitCode = bitCode >> 1;	// das nächste Bit betrachten
+					bitCode = bitCode >> 1;	// das nŠchste Bit betrachten
 				}
 			}
 		}
 	}
-
+  
 }
 
 
@@ -371,7 +371,7 @@ void display()
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glUseProgram(shaderProgramVoxelization);
 	
-	// TODO: Viewport auf Auflösung der Voxel-Textur setzen.	
+	// TODO: Viewport auf Auflšsung der Voxel-Textur setzen.	
   
   glViewport(0, 0, VOXEL_WIDTH, VOXEL_HEIGHT);
   
@@ -379,9 +379,9 @@ void display()
   glDisable(GL_DEPTH_TEST);
 	
 	// TODO: Logik-Operation aktivieren. Anstatt den Farbwert in das Target zu schreiben, 
-	// werden die Komponenten des Pixels als UINTs aufgefasst und mit dem Pixel im FBO mit OR verknüpft ("reingeodert"...)	
+	// werden die Komponenten des Pixels als UINTs aufgefasst und mit dem Pixel im FBO mit OR verknŸpft ("reingeodert"...)	
   glEnable(GL_COLOR_LOGIC_OP);
-  glLogicOp(GL_OR);
+  glLogicOp(GL_XOR);
   
 	// Projektionsmatrix setzen
 	glMatrixMode(GL_PROJECTION);
@@ -397,7 +397,7 @@ void display()
 	angle += 0.1f;
   
 	// Kanne zeichnen
-	glutSolidTeapot(0.7);
+	glutSolidTorus(0.2, 0.7, 100, 100);
 	
 	// TODO: Rendern in FBO beenden (Backbuffer wieder aktiv) und Fixed-Function Pipeline aktivieren.
   
@@ -405,12 +405,12 @@ void display()
 	// TODO: Texturdaten der Voxelisierungs-Textur auslesen.
   
   glReadPixels(0, 0, VOXEL_WIDTH, VOXEL_HEIGHT, GL_RGBA_INTEGER, GL_UNSIGNED_INT, pixels);
-
+  
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
   glUseProgram(0);
   
 	// **************** draw the voxel model ****************
-	// TODO: Viewport auf Bildschirmauflösung setzen und Backbuffer clearen.
+	// TODO: Viewport auf Bildschirmauflšsung setzen und Backbuffer clearen.
   
   glViewport(0, 0, PIC_WIDTH, PIC_HEIGHT);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
