@@ -1,7 +1,5 @@
 // ******* GPU Histogram ********
 
-//#include <windows.h>
-
 #include <GL/glew.h>
 #include <GLUT/glut.h>
 
@@ -277,6 +275,8 @@ void display()
 	drawScene();
 	
 	// ********* Histogrammdaten erzeugen, indem für jedes Pixel ein Vertex gerendert wird. Der Vertex Shader liest den Farbwert aus und berechnet seinen Position, abhängig von der Helligkeit des gelesenen Pixels. **********
+	glBindFramebuffer (GL_FRAMEBUFFER, createHistogramFB);      // activate fbo                 
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
 	// Orthografische Projektion nutzen, damit die Vertices auch korrekt auf die Pixel fallen.
 	glMatrixMode(GL_PROJECTION);
@@ -288,16 +288,31 @@ void display()
 	glLoadIdentity();
 
 	// TODO: Additives Blending aktivieren (mit jedem ankommenden Pixel wird der Counter um 1 erhöht)
+	glBlendFunc(GL_ONE, GL_ONE);
+	glEnable(GL_BLEND);
 	
 	// TODO: Tiefentest und Beleuchtung abschalten
+	glDisable(GL_DEPTH_TEST);
+	glDisable(GL_LIGHTING);
 	
-	// TODO: Histogram-Shader für jedes Pixel des Bildes ausführen.	
+	// TODO: Histogram-Shader für jedes Pixel des Bildes ausführen.
+	//useProgram, image texturt binden, histFBO
+	//glBindFramebuffer (GL_FRAMEBUFFER, 0); 
+	glUseProgram(shaderProgramCreateHistogram);
+	glBegin(GL_POINTS);
+		for(int y = 0; y < PIC_WIDTH * PIC_HEIGHT; y++)
+			glVertex3f(y % PIC_WIDTH, (float)((int)(y / PIC_WIDTH)), 1.0f);
+	glEnd();
+	glUseProgram(0);
 
 	// Histogramm-Daten von VRAM zu RAM streamen (in das Array hPixels)
 	glReadPixels(0, 0, 256, 1, GL_RGB, GL_FLOAT, hPixels);
+	for(int j = 0; j < 256*3; j++)
+		cout << hPixels[j];
 
-	// TODO: Blending abschalten	
-	
+	// TODO: Blending abschalten
+	glDisable(GL_BLEND);
+
 	// ********* Teekanne in Backbuffer rendern **********
 
 	// Rendern in das FBO beenden. Fortan wird wieder in den Backbuffer gerendert.
@@ -313,7 +328,21 @@ void display()
 	// die Einheitsmatrix setzen und die Vertices direkt im Clipping-Space an die GPU schicken
 	// oder alternativ eine Projektionsmatrix bauen, die es Ihnen erlaubt, die Positionen in
 	// Bildschirmkoordinaten (0..PIC_WIDTH-1, 0..PIC_HEIGHT-1) anzugeben.
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glOrtho(0, PIC_WIDTH, 0, PIC_HEIGHT, -1, 1);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
 	
+	glBegin(GL_LINES);
+	for(int i = 0; i < 255; i++)
+	{
+		glColor3f(1, 1, 1);
+		glVertex3f((float)i, 0.0f, 0.0f);
+		glVertex3f((float)i, (float)hPixels[i*3] * (float)PIC_HEIGHT, 0.0f);
+	}
+	glEnd();
+
 	// Frame ist beendet, Buffer swappen.
 	glutSwapBuffers();
 
@@ -402,6 +431,3 @@ int main(int argc, char** argv)
                 
     return 0;
 }
-
-
-
